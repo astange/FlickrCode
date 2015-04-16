@@ -48,6 +48,7 @@ if __name__ == '__main__':
 	flickr_api.set_auth_handler("Authorization")
 
 	if(args.type == "get"):
+		print args.filepath
 		pID = args.filepath
 		get(pID)
 	elif(args.type == "put"):
