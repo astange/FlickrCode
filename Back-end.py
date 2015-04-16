@@ -25,7 +25,7 @@ def get(photoID):
 		if(int(photos[i].id) == int(photoID)):
 			photo = photos[i]
 	if(photo != None):
-		photo.save(photos[i].title + ".JPG", size_label = 'Medium 640')
+		photo.save(photos[i].title + ".JPG")
 	else:
 		if(os.path.isfile(photos[i].title + ".JPG")):
 			os.remove(photos[i].title + ".JPG")
