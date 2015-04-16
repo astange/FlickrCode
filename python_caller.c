@@ -6,7 +6,7 @@ int get(unsigned long long photoID);
 
 int main(int argc, char *argv[])
 {
-    int error = get(strtoull(argv + sizeof(char), NULL,10));
+    int error = get(strtoull(argv[1], NULL,10));
     printf("%d\n", error);
 }
 
