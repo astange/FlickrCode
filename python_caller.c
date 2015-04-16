@@ -6,7 +6,7 @@ int get(unsigned long long photoID);
 
 int main(int argc, char *argv[])
 {
-    int error = get(strtoull(argv[1], NULL,10));
+    int error = put(strtoull(argv[1], NULL,10));
 }
 
 unsigned long long put(char * filepath)
@@ -29,7 +29,7 @@ unsigned long long put(char * filepath)
         return retVal;
     }
 
-    return 0;
+    return retVal;
 }
 int get(unsigned long long photoID)
 {
