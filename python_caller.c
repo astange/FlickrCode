@@ -16,6 +16,7 @@ unsigned long long put(char * filepath)
 int get(unsigned long long photoID)
 {
     char buf[1000];
+    printf("%llu\n",photoID)
     sprintf(buf, "python Back-end.py get %llu\n", photoID);
     const char * mode = "r\0";
     FILE* f = popen(buf,mode);
