@@ -16,7 +16,7 @@ int get(unsigned long long photoID)
 {
     char buf[1000];
     sprintf(buf, "python Back-end.py get %llu\n", photoID);
-    const char * mode = 'r';
+    const char * mode = "r";
     FILE* f = popen(buf,mode);
 
     if(f != NULL)
