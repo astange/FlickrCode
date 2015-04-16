@@ -5,7 +5,7 @@ int get(unsigned long long photoID);
 
 int main(int argc, char *argv[])
 {
-    int error = get(atoll(argv[1]));
+    int error = get((unsigned long long)argv[1]);
     printf("%d\n", error);
 }
 
@@ -20,7 +20,7 @@ int get(unsigned long long photoID)
     sprintf(buf, "python Back-end.py get %llu\n", photoID);
     const char * mode = "r\0";
     FILE* f = popen(buf,mode);
-    printf("%s\n",buf);
+    printf("%s",buf);
 
     if(f != NULL)
     {
