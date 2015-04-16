@@ -18,11 +18,11 @@ flickr_api.set_keys(api_key = '7952986139bced63445b1f94d699caf2', api_secret = '
 
 
 def get(photoID):
-	print photoID
 	user = flickr_api.Person.findByUserName("timefive5")
 	photos = user.getPhotos()
 	photo = None
 	for i in range(0,len(photos)):
+		print photos[i]
 		if(int(photos[i].id) == int(photoID)):
 			photo = photos[i]
 	if(photo != None):
@@ -48,7 +48,6 @@ if __name__ == '__main__':
 	flickr_api.set_auth_handler("Authorization")
 
 	if(args.type == "get"):
-		print args.filepath
 		pID = args.filepath
 		get(pID)
 	elif(args.type == "put"):
