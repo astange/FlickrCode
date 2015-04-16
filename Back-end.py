@@ -26,9 +26,6 @@ def get(photoID):
 			photo = photos[i]
 	if(photo != None):
 		photo.save(photos[i].title + ".JPG")
-	else:
-		if(os.path.isfile(photos[i].title + ".JPG")):
-			os.remove(photos[i].title + ".JPG")
 
 def put(filepath):
 	fPath = filepath

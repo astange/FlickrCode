@@ -1,5 +1,36 @@
 #include <stdio.h>
-#include <python2.7/Python.h>
+
+unsigned long long put(char * filepath);
+int get(unsigned long long photoID);
+
+int main(int argc, char *argv[])
+{
+    get(atoll(argv[1]));
+}
+
+unsigned long long put(char * filepath)
+{
+
+}
+int get(unsigned long long photoID)
+{
+    char[1000] buf;
+    sprintf(buf, "python Back-end.py get %llu\n", photoID);
+    FILE* f = popen(buf,'r');
+
+    if(f != NULL)
+    {
+        pclose(f);
+    }
+    else
+    {
+        return -1;
+    }
+
+    return 0;
+}
+
+/*#include <python2.7/Python.h>
 
 static unsigned long long photoID;
 static PyObject *
@@ -130,4 +161,4 @@ unsigned long long put(char * filepath)
     fclose(backEnd);
 
 	return photoID;
-}
+}*/
