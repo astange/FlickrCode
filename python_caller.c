@@ -5,7 +5,8 @@ int get(unsigned long long photoID);
 
 int main(int argc, char *argv[])
 {
-    get(atoll(argv[1]));
+    int error = get(atoll(argv[1]));
+    printf("%d\n", error);
 }
 
 unsigned long long put(char * filepath)
@@ -16,11 +17,14 @@ int get(unsigned long long photoID)
 {
     char buf[1000];
     sprintf(buf, "python Back-end.py get %llu\n", photoID);
-    const char * mode = "r";
+    const char * mode = "r\0";
     FILE* f = popen(buf,mode);
 
     if(f != NULL)
     {
+        while (fscanf(f, "%s", buf) != EOF) {
+            printf("%s\n", buf);
+        }
         pclose(f);
     }
     else

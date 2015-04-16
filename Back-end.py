@@ -18,6 +18,7 @@ flickr_api.set_keys(api_key = '7952986139bced63445b1f94d699caf2', api_secret = '
 
 
 def get(photoID):
+	print "Inside!"
 	user = flickr_api.Person.findByUserName("timefive5")
 	photos = user.getPhotos()
 	photo = None
