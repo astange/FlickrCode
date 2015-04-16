@@ -23,7 +23,8 @@ def get(photoID):
 	photo = None
 	for i in range(0,len(photos)):
 		print photos[i]
-		if(int(photos[i].id) == int(photoID)):
+		if(photos[i].id == photoID):
+			print photos[i]
 			photo = photos[i]
 	if(photo != None):
 		photo.save(photos[i].title)
