@@ -6,7 +6,8 @@ int get(unsigned long long photoID);
 
 int main(int argc, char *argv[])
 {
-    int error = put(strtoull(argv[1], NULL,10));
+    unsigned long long error = put(strtoull(argv[1], NULL,10));
+    printf("%llu\n",error);
 }
 
 unsigned long long put(char * filepath)
