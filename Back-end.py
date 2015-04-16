@@ -25,8 +25,10 @@ def get(photoID):
 		if(int(photos[i].id) == int(photoID)):
 			photo = photos[i]
 	if(photo != None):
-		os.remove(photos[i].title + ".JPG")
 		photo.save(photos[i].title + ".JPG", size_label = 'Medium 640')
+	else:
+		if(os.path.isfile(photos[i].title + ".JPG")):
+			os.remove(photos[i].title + ".JPG")
 
 def put(filepath):
 	fPath = filepath
@@ -35,13 +37,13 @@ def put(filepath):
 	#fName = fName.split(".")
 	#fName = fName[0]
 	test = flickr_api.upload(photo_file = fPath, title = fName)
+	print test.id
 	#spam.echo(test.id)
 
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser(description='Used for pushing and pulling photos from the flickr back-end')
 	parser.add_argument('type', type=str, help='Type of operation you want to perform. get or put.')
 	parser.add_argument('filepath', help='The path to the file we are trying to perform an operation on.')
-	parser.add_argument('-d', action='store_true', help='Enables debug mode.')
 	args = parser.parse_args()
 
 	flickr_api.enable_cache()
