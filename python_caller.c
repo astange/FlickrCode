@@ -11,12 +11,29 @@ int main(int argc, char *argv[])
 
 unsigned long long put(char * filepath)
 {
+    char buf[1000];
+    sprintf(buf, "python Back-end.py put %s\n", filepath);
+    const char * mode = "r\0";
+    FILE* f = popen(buf,mode);
+    unsigned long long retVal = 0;
+    if(f != NULL)
+    {
+        while (fscanf(f, "%s", buf) != EOF) {
+            retVal = strtoull(buf,NULL,10);
+            printf("%s\n", buf);
+        }
+        pclose(f);
+    }
+    else
+    {
+        return retVal;
+    }
 
+    return 0;
 }
 int get(unsigned long long photoID)
 {
     char buf[1000];
-    printf("%llu\n",photoID);
     sprintf(buf, "python Back-end.py get %llu\n", photoID);
     const char * mode = "r\0";
     FILE* f = popen(buf,mode);
