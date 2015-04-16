@@ -14,9 +14,10 @@ unsigned long long put(char * filepath)
 }
 int get(unsigned long long photoID)
 {
-    char[1000] buf;
+    char buf[1000];
     sprintf(buf, "python Back-end.py get %llu\n", photoID);
-    FILE* f = popen(buf,'r');
+    const char * mode = 'r';
+    FILE* f = popen(buf,mode);
 
     if(f != NULL)
     {
