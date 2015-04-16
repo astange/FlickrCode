@@ -22,12 +22,11 @@ def get(photoID):
 	photos = user.getPhotos()
 	photo = None
 	for i in range(0,len(photos)):
-		print photos[i]
 		if(photos[i].id == photoID):
-			print photos[i]
 			photo = photos[i]
+			break
 	if(photo != None):
-		photo.save(photos[i].title)
+		photo.save(photo.title)
 
 def put(filepath):
 	fPath = filepath
