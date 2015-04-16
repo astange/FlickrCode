@@ -1,11 +1,12 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 unsigned long long put(char * filepath);
 int get(unsigned long long photoID);
 
 int main(int argc, char *argv[])
 {
-    int error = get((unsigned long long)argv[1]);
+    int error = get(strtoull(argv + sizeof(char), NULL,10));
     printf("%d\n", error);
 }
 
