@@ -19,8 +19,10 @@ struct photo* photos = NULL;
 
 static int rpfs_getattr(const char *path, struct stat *stbuf)
 {
-        if(strcmp(path, "/") != 0)
+        if(strcmp(path, "/") != 0){
+                printf("BAD\n");
                 return -ENOENT;
+        }
         stbuf->st_mode = S_IFREG | 0644;
         stbuf->st_nlink = 1;
         stbuf->st_uid = getuid();
@@ -28,6 +30,17 @@ static int rpfs_getattr(const char *path, struct stat *stbuf)
         stbuf->st_size = (1ULL << 32); /* 4G */
         stbuf->st_blocks = 0;
         stbuf->st_atime = stbuf->st_mtime = stbuf->st_ctime = time(NULL);
+        return 0;
+}
+
+static int rpfs_open(const char *path, struct fuse_file_info *fi)
+{
+        if (strcmp(path, "/") != 0){
+                printf("BAD\n");
+                return -ENOENT;
+        }
+        if ((fi->flags & 3) != O_RDONLY)
+                return -EACCES;
         return 0;
 }
 
