@@ -105,7 +105,7 @@ int rpfs_write(const char *path, const char *buf, size_t size, off_t offset,
 }
 
 struct fuse_operations rpfs_oper = {
-    .getattr = null_getattr,
+    .getattr = rpfs_getattr,
     .write = rpfs_write
 };
 
