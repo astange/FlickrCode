@@ -4,7 +4,6 @@
 #include <openssl/md5.h>
 #include <errno.h>
 #include <fuse.h>
-#include "KeyValue.h"
 #include "uthash.h"
 #include "python_caller.h"
 
