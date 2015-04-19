@@ -87,7 +87,7 @@ int rpfs_write(const char *path, const char *buf, size_t size, off_t offset,
     }
     gettimeofday(&tstartFullEnd, NULL);
     printf("Time spent performing entire operation: %4ld seconds and %d microseconds\n", tstartFullEnd.tv_sec - tstartFull.tv_sec, tstartFullEnd.tv_usec - tstartFull.tv_usec);
-    return 0;
+    return size;
 }
 
 struct fuse_operations rpfs_oper = {
