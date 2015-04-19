@@ -1,14 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "python_caller.h"
 
-unsigned long long put(char * filepath);
-int get(unsigned long long photoID);
-
+/*
 int main(int argc, char *argv[])
 {
     int error = get(strtoull(argv[1], NULL,10));
     //unsigned long long error = put(argv[1]);
-}
+}*/
 
 unsigned long long put(char * filepath)
 {
