@@ -68,7 +68,7 @@ static int hello_write(const char *path, const char *buf, size_t size, off_t off
     struct fuse_file_info *fi) {
 
     printf("Hi\n");
-    struct timeval tstartFull;
+    /*struct timeval tstartFull;
     struct timeval tstartFullEnd;
     gettimeofday(&tstartFull,NULL);
 
@@ -134,7 +134,7 @@ static int hello_write(const char *path, const char *buf, size_t size, off_t off
         HASH_ADD_STR(photos, md5string, p);
     }
     gettimeofday(&tstartFullEnd, NULL);
-    printf("Time spent performing entire operation: %4ld seconds and %d microseconds\n", tstartFullEnd.tv_sec - tstartFull.tv_sec, tstartFullEnd.tv_usec - tstartFull.tv_usec);
+    printf("Time spent performing entire operation: %4ld seconds and %d microseconds\n", tstartFullEnd.tv_sec - tstartFull.tv_sec, tstartFullEnd.tv_usec - tstartFull.tv_usec);*/
     return size;
 }
 static struct fuse_operations hello_oper = {
