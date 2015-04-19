@@ -23,6 +23,7 @@ static int rpfs_getattr(const char *path, struct stat *stbuf)
                 printf("BAD\n");
                 return -ENOENT;
         }
+        printf("Here\n");
         stbuf->st_mode = S_IFREG | 0755;
         stbuf->st_nlink = 1;
         stbuf->st_uid = getuid();
