@@ -7,8 +7,6 @@
 #include "uthash.h"
 #include "python_caller.h"
 
-#define FUSE_USE_VERSION 30
-
 struct photo {
     char md5string[MD5_DIGEST_LENGTH*2+1];
     unsigned long long id;
@@ -85,7 +83,7 @@ int rpfs_write(const char *path, const char *buf, size_t size, off_t offset,
     return 0;
 }
 
-struct fuse_opeartions rpfs_oper = {
+struct fuse_operations rpfs_oper = {
     .write = rpfs_write
 };
 
