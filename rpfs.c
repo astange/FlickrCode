@@ -36,17 +36,6 @@ static int rpfs_getattr(const char *path, struct stat *stbuf)
         return res;
 }
 
-static int rpfs_open(const char *path, struct fuse_file_info *fi)
-{
-        if (strcmp(path, "/") != 0){
-                printf("BAD\n");
-                return -ENOENT;
-        }
-        if ((fi->flags & 3) != O_RDONLY)
-                return -EACCES;
-        return 0;
-}
-
 static int rpfs_setxattr(const char *path, const char *name, const char *value,
                         size_t size, int flags)
 {
