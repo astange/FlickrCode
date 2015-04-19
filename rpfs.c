@@ -95,11 +95,13 @@ static int rpfs_write(const char *path, const char *buf, size_t size, off_t offs
     // Extract instruction and filename
     int index = 0;
     for (i=0; i<strlen(buf);i++) {
+        printf("%c\n",buf[i])
         if (buf[i]==' ') {
             index = i;
             break;
         }
     }
+    printf("%d\n",index);
 
     char* instr = malloc(index);
     char* filename = malloc(strlen(buf)-index-1);
