@@ -53,7 +53,7 @@ static int hello_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
 static int hello_truncate (const char * path, off_t size)
 {
         int res;
-        res = truncate(path, size);
+        res = truncate(path + 1, size);
         if (res == -1)
                 return -errno;
         return 0;
