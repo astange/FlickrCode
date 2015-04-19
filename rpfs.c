@@ -4,6 +4,7 @@
 #include <openssl/md5.h>
 #include <errno.h>
 #define FUSE_USE_VERSION 26
+#define _POSIX_C_SOURCE 199309
 #include <fuse.h>
 #include "uthash.h"
 #include "python_caller.h"
