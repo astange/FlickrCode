@@ -96,8 +96,8 @@ static int rpfs_write(const char *path, const char *buf, size_t size, off_t offs
     int index = 0;
     for (i=0; i<strlen(buf);i++) {
         printf("%c\n",buf[i]);
-        if (buf[i]==' ') {
-            index = i;
+        if (buf[i]=='t') {
+            index = i + 1;
             break;
         }
     }
