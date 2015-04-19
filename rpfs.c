@@ -5,6 +5,7 @@
 #include <errno.h>
 #define FUSE_USE_VERSION 30
 #include <fuse.h>
+#include <sys/time.h>
 #include "uthash.h"
 #include "python_caller.h"
 
@@ -18,6 +19,10 @@ struct photo* photos = NULL;
 
 int rpfs_write(const char *path, const char *buf, size_t size, off_t offset,
     struct fuse_file_info *fi) {
+
+    struct timeval tstartFull;
+    struct timeval tstartFullEnd;
+    gettimeofday(&tstartFull,NULL);
 
     // Check path validity
     int i;
@@ -80,7 +85,8 @@ int rpfs_write(const char *path, const char *buf, size_t size, off_t offset,
         p->id = put(filename);
         HASH_ADD_STR(photos, md5string, p);
     }
-
+    gettimeofday(&tstartFullEnd, NULL);
+    printf("Time spent performing entire operation: %4ld seconds and %d microseconds\n", tfinish.tv_sec - tstart.tv_sec, tfinish.tv_usec - tstart.tv_usec);
     return 0;
 }
 
