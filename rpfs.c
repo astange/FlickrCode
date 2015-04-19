@@ -49,6 +49,15 @@ static int hello_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
         filler(buf, master_path + 1, NULL, 0);
         return 0;
 }
+
+static int hello_truncate (const char *, off_t)
+{
+        int res;
+        res = truncate(path, size);
+        if (res == -1)
+                return -errno;
+        return 0;
+}
 static int hello_open(const char *path, struct fuse_file_info *fi)
 {
        /* if (strcmp(path, master_path) != 0)
@@ -154,6 +163,7 @@ static struct fuse_operations hello_oper = {
         .write          = hello_write,
         .read           = hello_read,
         .setxattr       = hello_setxattr,
+        .truncate       = hello_truncate,
 };
 int main(int argc, char *argv[])
 {
