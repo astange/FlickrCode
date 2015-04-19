@@ -40,8 +40,10 @@ static int rpfs_open(const char *path, struct fuse_file_info *fi)
                 printf("BAD\n");
                 return -ENOENT;
         }
-        if ((fi->flags & 3) != O_RDONLY)
+        if ((fi->flags & 3) != O_RDONLY){
+                printf("NO ACCESS\n");
                 return -EACCES;
+        }
         return 0;
 }
 
