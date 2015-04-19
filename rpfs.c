@@ -109,7 +109,7 @@ static int rpfs_write(const char *path, const char *buf, size_t size, off_t offs
 
     // Check instruction validity
     if (strcmp(instr, "get")!=0 && strcmp(instr, "post")!=0)
-        return -1;
+        return -ENOENT;
 
     // Check filename path validity, maybe not needed
     for (i=0; i<strlen(filename); i++)
