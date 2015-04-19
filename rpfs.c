@@ -27,6 +27,16 @@ static int hello_getattr(const char *path, struct stat *stbuf)
                 res = -ENOENT;
         return res;
 }
+static int hello_setxattr(const char *path, const char *name, const char *value,
+                        size_t size, int flags)
+{
+        int res = lsetxattr(path, name, value, size, flags);
+        if (res == -1)
+                return -errno;
+        return 0;
+}
+
+
 static int hello_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
                          off_t offset, struct fuse_file_info *fi)
 {
@@ -41,10 +51,10 @@ static int hello_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
 }
 static int hello_open(const char *path, struct fuse_file_info *fi)
 {
-        /*if (strcmp(path, master_path) != 0)
+        if (strcmp(path, master_path) != 0)
                 return -ENOENT;
         if ((fi->flags & 3) != O_RDONLY)
-                return -EACCES;*/
+                return -EACCES;
         return 0;
 }
 static int hello_read(const char *path, char *buf, size_t size, off_t offset,
@@ -143,6 +153,7 @@ static struct fuse_operations hello_oper = {
         .open           = hello_open,
         .write          = hello_write,
         .read           = hello_read,
+        .setxattr       = hello_setxattr,
 };
 int main(int argc, char *argv[])
 {
