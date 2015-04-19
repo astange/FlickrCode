@@ -51,10 +51,10 @@ static int hello_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
 }
 static int hello_open(const char *path, struct fuse_file_info *fi)
 {
-        if (strcmp(path, master_path) != 0)
+       /* if (strcmp(path, master_path) != 0)
                 return -ENOENT;
         if ((fi->flags & 3) != O_RDONLY)
-                return -EACCES;
+                return -EACCES;*/
         return 0;
 }
 static int hello_read(const char *path, char *buf, size_t size, off_t offset,
