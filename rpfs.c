@@ -86,7 +86,7 @@ static int hello_read(const char *path, char *buf, size_t size, off_t offset,
 static int hello_write(const char *path, const char *buf, size_t size, off_t offset,
     struct fuse_file_info *fi) {
 
-    printf("Hi\n");
+    printf("%s\n", buf);
     /*struct timeval tstartFull;
     struct timeval tstartFullEnd;
     gettimeofday(&tstartFull,NULL);
