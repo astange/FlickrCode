@@ -17,6 +17,20 @@ struct photo {
 
 struct photo* photos = NULL;
 
+static int rpfs_getattr(const char *path, struct stat *stbuf)
+{
+        if(strcmp(path, "/") != 0)
+                return -ENOENT;
+        stbuf->st_mode = S_IFREG | 0644;
+        stbuf->st_nlink = 1;
+        stbuf->st_uid = getuid();
+        stbuf->st_gid = getgid();
+        stbuf->st_size = (1ULL << 32); /* 4G */
+        stbuf->st_blocks = 0;
+        stbuf->st_atime = stbuf->st_mtime = stbuf->st_ctime = time(NULL);
+        return 0;
+}
+
 int rpfs_write(const char *path, const char *buf, size_t size, off_t offset,
     struct fuse_file_info *fi) {
 
@@ -91,6 +105,7 @@ int rpfs_write(const char *path, const char *buf, size_t size, off_t offset,
 }
 
 struct fuse_operations rpfs_oper = {
+    .getattr = null_getattr,
     .write = rpfs_write
 };
 
