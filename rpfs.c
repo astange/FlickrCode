@@ -107,6 +107,9 @@ static int rpfs_write(const char *path, const char *buf, size_t size, off_t offs
     memcpy(instr, buf, index);
     memcpy(filename, &buf[index+2], strlen(buf)-index);
 
+    printf("%s\n", instr);
+    printf("%s\n", filename);
+
     // Check instruction validity
     if (strcmp(instr, "get")!=0 && strcmp(instr, "post")!=0)
         return -ENOENT;
