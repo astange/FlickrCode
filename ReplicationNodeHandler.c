@@ -49,9 +49,9 @@ static int rpfs_checkCrash(const char *path, struct fuse_file_info *fi){
     rpfs_readdir(path, currDir, int(* fuse_fill_dir_t)(void, const char, const struct stat, off_t), fi);
    
     int index=0;
-    while(NodeListing[index] != NULL){
+    while(NodeListing[index].d_name != NULL){
         if(strcmp(currDir[index].d_name,NodeListing[index].d_name)!=0){
-            errMsg= rpfs_mkRep(strcat(path, NodeListing[index].d_name), 777,
+            errMsg= rpfs_mkRep(strcat(path, NodeListing[index].d_name),S_IFREG|0777,
                                sizeof(NodeListing[index].d_name), fi);
             
         }
@@ -63,13 +63,14 @@ static int rpfs_checkCrash(const char *path, struct fuse_file_info *fi){
     
 }
 
-//recreates nodes, can do up to the needed amount
+//creates nodes
 static int rpfs_init(int needed, const char **paths, char *metaDataCopy,size_t size, struct fuse_file_info *fi){
-    for (int i = 0; i < needed; i++) {
+    int i = 0;
+    for (i; i < needed; i++) {
         /*TO DO:
          Check failure events
          */
-        rpfs_mkRep(paths[i], 777, size, fi);
+        rpfs_mkRep(paths[i], S_IFREG | 0777, size, fi);
     }
     return 0;
 }
@@ -86,7 +87,7 @@ static int rpfs_init(int needed, const char **paths, char *metaDataCopy,size_t s
  *
  * Introduced in version 2.5
  *
- * mode is 777
+ * mode is 0777 | S_IFREG (if regular file)
  */
 static int rpfs_create(const char *path, mode_t mode, struct fuse_file_info *fi){
     int fd;
@@ -110,7 +111,7 @@ int rpfs_write(const char *path, const char *buf, size_t size, off_t offset, str
     int errMsg = 0;
     
     errMsg = pwrite(fi->fh, buf, size, offset);
-    if (retstat < 0)
+    if (errMsg < 0)
         return -errno;
     
     return errMsg;
@@ -132,7 +133,7 @@ int rpfs_write(const char *path, const char *buf, size_t size, off_t offset, str
 int rpfs_read(const char *path, char *buf, size_t size, off_t offset, struct fuse_file_info *fi){
     int errMsg = 0;
     errMsg = pread(fi->fh, buf, size, offset);
-    if (retstat < 0)
+    if (errMsg < 0)
         return -errMsg;
     
     return errMsg;
@@ -163,7 +164,7 @@ static int rpfs_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
     
     /* add all directory entries to buffer */
     while ((de = readdir(dp)) != NULL) {
-        if (filler(buf, de->d_name, &st, 0))
+        if (filler(buf, de->d_name, NULL, 0))
             break;
     }
     closedir(dp);
