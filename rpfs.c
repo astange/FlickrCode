@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <openssl/md5.h>
 #include <errno.h>
+#define FUSE_USE_VERSION 26
 #include <fuse.h>
 #include "uthash.h"
 #include "python_caller.h"
