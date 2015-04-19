@@ -50,7 +50,7 @@ static int hello_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
         return 0;
 }
 
-static int hello_truncate (const char *, off_t)
+static int hello_truncate (const char *, off_t size)
 {
         int res;
         res = truncate(path, size);
