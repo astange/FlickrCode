@@ -62,7 +62,7 @@ int rpfs_write(const char *path, const char *buf, size_t size, off_t offset,
 
     // MD5 to String
     char md5string[MD5_DIGEST_LENGTH*2+1];
-    for(int i = 0; i < MD5_DIGEST_LENGTH; ++i)
+    for(i = 0; i < MD5_DIGEST_LENGTH; ++i)
         sprintf(&md5string[i*2], "%02x", (unsigned int)digest[i]);
 
     struct photo* p;
