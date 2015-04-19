@@ -44,7 +44,7 @@ static int rpfs_open(const char *path, struct fuse_file_info *fi)
         return 0;
 }
 
-int rpfs_write(const char *path, const char *buf, size_t size, off_t offset,
+static int rpfs_write(const char *path, const char *buf, size_t size, off_t offset,
     struct fuse_file_info *fi) {
 
     struct timeval tstartFull;
