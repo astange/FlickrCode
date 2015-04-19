@@ -6,7 +6,7 @@
 #include <fuse.h>
 #include "KeyValue.h"
 #include "uthash.h"
-#include "python_caller.h" // modify python filename
+#include "python_caller.h"
 
 struct photo {
     char md5string[MD5_DIGEST_LENGTH*2+1];
