@@ -7,6 +7,8 @@
 #include "uthash.h"
 #include "python_caller.h"
 
+#define FUSE_USE_VERSION 30
+
 struct photo {
     char md5string[MD5_DIGEST_LENGTH*2+1];
     unsigned long long id;
