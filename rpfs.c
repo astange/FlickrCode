@@ -189,10 +189,10 @@ static int rpfs_write(const char *path, const char *buf, size_t size, off_t offs
  * mode is 0777 | S_IFREG (if regular file)
  */
 static int rpfs_create(const char *path, mode_t mode, struct fuse_file_info *fi){
-    /*int fd = NULL;
+    int fd = NULL;
     fd = creat(path, mode);
     if(fd < 0)
-        return -errno;*/
+        return -errno;
     return 0;
     
 }
@@ -210,12 +210,12 @@ static int rpfs_create(const char *path, mode_t mode, struct fuse_file_info *fi)
  */
 
 static int rpfs_read(const char *path, char *buf, size_t size, off_t offset, struct fuse_file_info *fi){
-    int errMsg = 0;
+    /*int errMsg = 0;
     errMsg = pread(fi->fh, buf, size, offset);
     if (errMsg < 0)
-        return -errMsg;
+        return -errMsg;*/
     
-    return errMsg;
+    return 0;
 }
 
 static int rpfs_writeBackup(mode_t mode, size_t size,struct fuse_file_info *fi){
