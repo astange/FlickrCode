@@ -7,6 +7,7 @@
 #include <fuse.h>
 #include <sys/time.h>
 #include <fcntl.h>
+#include <unistd.h>
 #include "uthash.h"
 #include "python_caller.h"
 
@@ -17,6 +18,7 @@ struct photo {
 };
 
 struct photo* photos = NULL;
+struct photo* photosNodes = NULL;
 
 static const char *master_path = "/master.node";
 int nodesAlive[10];
@@ -36,42 +38,91 @@ static int createBackup()
     return 0;
 }
 
+int copy_file(char *old_filename, char  *new_filename)
+    {
+        FILE  *ptr_old, *ptr_new;
+        errno_t err = 0, err1 = 0;
+        int  a;
+
+        err = fopen_s(&ptr_old, old_filename, "rb");
+        err1 = fopen_s(&ptr_new, new_filename, "wb");
+
+        if(err != 0)
+            return  -1;
+
+        if(err1 != 0)
+        {
+            fclose(ptr_old);
+            return  -1;
+        }
+
+        while(1)
+        {
+            a  = fgetc(ptr_old);
+
+            if(!feof(ptr_old))
+                fputc(a, ptr_new);
+            else
+                break;
+        }
+
+        fclose(ptr_new);
+        fclose(ptr_old);
+        return  0;
+    }
+
 static int stillAlive()
 {
     int i;
+    char * name = "/tmp/backup/backup_";
     for(i = 0; i < 10; i++)
     {
-
+        char filename[100];
+        sprintf(filename, "%s%d", name, i);
+        if(access(filename,F_OK) == 0)
+        {
+            if(nodesAlive[i] == 0)
+            {
+                char filename2[100];
+                sprintf(filename2, "%s%d", name, i - 1);
+                remove(filename);
+                copy_file(filename2,filename);
+            }
+            nodesAlive[i] = 1;
+        }else
+        {
+            nodesAlive[i] = 0;
+        }
     }
-}
-
-static int removeNode(int i)
-{
-    char * name = "/tmp/backup/backup_";
-    char filename[100];
-    sprintf(filename, "%s%d", name, i);
-    int retVal = remove(filename);
-    printf("RetVAL! %d\n", retVal);
-    nodesAlive[i] = 0;
-
-}
-
-static int addNode(int i)
-{
-
 }
 
 static int checkValue(struct photo * p)
 {
     stillAlive();
-    printf("Checking!\n");
-    return 0;
+    int i;
+    int agree = 0;
+    int disagree = 0;
+    char * name = "/tmp/backup/backup_";
+    for(i = 0; i < 10; i++)
+    {
+        char filename[100];
+        sprintf(filename, "%s%d", name, i);
+
+    }
+    if(agree >= disagree)
+    {
+        return 0;
+    }
+    else
+    {
+        return -1;
+    }
+ 
 }
 
 static int putValue()
 {
     stillAlive();
-    removeNode(1);
     printf("Putting!\n");
     return 0;
 }
@@ -188,8 +239,17 @@ static int rpfs_write(const char *path, const char *buf, size_t size, off_t offs
         HASH_FIND_STR(photos, md5string, p);
         if(p != NULL)
         {
-            checkValue(p);
-            get(p->id);
+            if(checkValue(p) == 0)
+            {
+                get(p->id);
+            }else
+            {
+                printf("File does not exist!\n");
+            }
+        }
+        else
+        {
+            printf("File does not exist!\n");
         }
     }
 
