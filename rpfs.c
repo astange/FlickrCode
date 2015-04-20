@@ -122,8 +122,8 @@ static int checkValue(struct photo * p)
             fseek(f, 0L, SEEK_SET);
             struct photoBackup* photosNodes = malloc(sz);
             int agreed = 0;
-            fread(photosNodes, sizeof(photosNodes[i]), sizeof(photosNodes)/sizeof(photosNodes[i]),f);
-            for(j = 0; j < sizeof(photosNodes)/sizeof(photosNodes[i]); j++)
+            fread(photosNodes, sizeof(photosNodes[0]), sizeof(photosNodes)/sizeof(photosNodes[0]),f);
+            for(j = 0; j < sizeof(photosNodes)/sizeof(photosNodes[0]); j++)
             {
                 printf("%llu\n", photosNodes[i].id);
                 if(p->id == photosNodes[i].id)
