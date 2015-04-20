@@ -89,6 +89,7 @@ static int stillAlive()
         {
             if(nodesAlive[i] == 0)
             {
+                printf("Erasing!\n");
                 char filename2[100];
                 sprintf(filename2, "%s%d", name, i - 1);
                 remove(filename);
@@ -117,7 +118,7 @@ static int checkValue(struct photo * p)
             printf("Here\n");
             char filename[100];
             sprintf(filename, "%s%d", name, i);
-            FILE *f = fopen(filename, "wb");
+            FILE *f = fopen(filename, "rb+");
             fseek(f, 0L, SEEK_END);
             sz = ftell(f);
             fseek(f, 0L, SEEK_SET);
