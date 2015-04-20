@@ -22,8 +22,9 @@ static const char *master_path = "/master.node";
 
 static int createBackup()
 {
+    int i;
     char * name = "/tmp/test/backup_";
-    for(int i = 0; i < 10; i++)
+    for(i = 0; i < 10; i++)
     {
         char filename[100];
         sprintf(filename, "%s%d", name, i);
