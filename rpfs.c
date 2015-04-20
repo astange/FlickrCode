@@ -219,7 +219,7 @@ static int rpfs_read(const char *path, char *buf, size_t size, off_t offset, str
 }
 
 static int rpfs_writeBackup(mode_t mode, size_t size,struct fuse_file_info *fi){
-    /*int erMsg;
+    int erMsg;
     erMsg = rpfs_checkCrash(fi);
     if(erMsg < 0){
         return erMsg;
@@ -229,12 +229,12 @@ static int rpfs_writeBackup(mode_t mode, size_t size,struct fuse_file_info *fi){
     int i = 0;
     for (i; i < backupNum; i++) {
         rpfs_write(nodeListing[i], metaDataCopy, size, 0, fi);
-    }*/
+    }
     return 0;
 }
 
 static int rpfs_checkCrash(struct fuse_file_info *fi){
-    /*int errMsg;
+    int errMsg;
     DIR *dp = opendir("/");
     if(dp == NULL){
         return -errno;
