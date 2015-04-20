@@ -35,6 +35,18 @@ static int createBackup()
     }
     return 0;
 }
+
+static int checkValue()
+{
+    printf("Checking!\n");
+    return 0;
+}
+
+static int putValue()
+{
+    printf("Putting!\n");
+    return 0;
+}
  
 
 static int rpfs_getattr(const char *path, struct stat *stbuf)
@@ -153,7 +165,10 @@ static int rpfs_write(const char *path, const char *buf, size_t size, off_t offs
     // get - check hash - python get
     if (strcmp(instr, "get")==0) {
         HASH_FIND_STR(photos, md5string, p);
-        get(p->id);
+        if(p != NULL)
+        {
+            get(p->id);
+        }
     }
 
     // post - hash - if file exist, md5 hash, python
