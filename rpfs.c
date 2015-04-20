@@ -115,20 +115,16 @@ static int checkValue(struct photo * p)
         {
             char filename[100];
             sprintf(filename, "%s%d", name, i);
-            printf("%s\n",filename);
             FILE *f = fopen(filename, "rb+");
             fseek(f, 0L, SEEK_END);
             long sz = ftell(f);
             fseek(f, 0L, SEEK_SET);
             struct photoBackup* photosNodes = malloc(sz);
-            printf("%d\n",sz);
-            printf("%d\n",sizeof(photosNodes)/sizeof(photosNodes[0]));
             int agreed = 0;
             fread(photosNodes, sizeof(photosNodes[0]), sizeof(photosNodes)/sizeof(photosNodes[0]),f);
             for(j = 0; j < sizeof(photosNodes)/sizeof(photosNodes[0]); j++)
             {
-                printf("%llu\n", photosNodes[i].id);
-                if(p->id == photosNodes[i].id)
+                if(p->id == photosNodes[j].id)
                 {
                     printf("Agree!\n");
                     agree++;
