@@ -123,6 +123,8 @@ static int checkValue(struct photo * p)
             printf("%d\n",sz);
             int agreed = 0;
             fread(photosNodes, sizeof(photosNodes[0]), sizeof(photosNodes)/sizeof(photosNodes[0]),f);
+            printf("%d\n", sizeof(photosNodes[0]));
+            printf("%d\n", sizeof(photoBackup));
             printf("%d\n",sizeof(photosNodes)/sizeof(photosNodes[0]));
             for(j = 0; j < sizeof(photosNodes)/sizeof(photosNodes[0]); j++)
             {
