@@ -234,7 +234,7 @@ static int rpfs_writeBackup(mode_t mode, size_t size,struct fuse_file_info *fi){
 }
 
 static int rpfs_checkCrash(struct fuse_file_info *fi){
-    int errMsg;
+    /*int errMsg;
     DIR *dp = opendir("/");
     if(dp == NULL){
         return -errno;
@@ -249,7 +249,7 @@ static int rpfs_checkCrash(struct fuse_file_info *fi){
     /* TO DO:
      Check err clauses
      */
-    return errMsg;
+    return 0;
 
 }
 
