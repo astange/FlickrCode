@@ -18,8 +18,8 @@ struct photo {
 
 struct photo* photos = NULL;
 static const char *master_path = "/master.node";
-const char **nodeListing;
-const char **readBackups;
+char **nodeListing;
+char **readBackups;
 int backupNum;
 
 
@@ -61,7 +61,7 @@ static int rpfs_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
         filler(buf, master_path + 1, NULL, 0);
         int i = 0;
         for (i; i < backupNum; i++) {
-            filler(readBackups[i], nodeListing[i]+1, NULL, 0);
+            filler((void *)readBackups[i], nodeListing[i]+1, NULL, 0);
         }
         return 0;
 }
@@ -179,10 +179,10 @@ static int rpfs_writeBackup(mode_t mode, size_t size,struct fuse_file_info *fi){
         return erMsg;
     }
     char *metaDataCopy;
-    rpfs_read(master_path, metaDataCopy, size, offset, fi);
+    rpfs_read(master_path, metaDataCopy, size, 0, fi);
     int i = 0;
     for (i; i < backupNum; i++) {
-        rpfs_write(nodeListing[i], metaDataCopy, size, fi);
+        rpfs_write(nodeListing[i], metaDataCopy, size, 0, fi);
     }
     return erMsg;
 }
