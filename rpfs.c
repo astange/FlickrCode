@@ -276,9 +276,7 @@ static int rpfs_init(int backups,int argc, char *argv[]){
     }
     i = 0;
     for (i; i < backups; i++) {
-        /*TO DO:
-         Check failure events
-         */
+        printf("Created node %d", i);
         fuse_main(argc, argv, &rpfs_oper, NULL);
     }
     return 0;
