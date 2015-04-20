@@ -7,6 +7,7 @@
 #include <fuse.h>
 #include <sys/time.h>
 #include <fcntl.h>
+#include <dirent.h>
 #include "uthash.h"
 #include "python_caller.h"
 #include "rpfs.h"
@@ -22,7 +23,7 @@ struct photo {
 struct photo* photos = NULL;
 static const char *master_path = "/master.node";
 char **nodeListing;
-char **readBackups;
+char **backups;
 int backupNum;
 
 
@@ -51,7 +52,6 @@ static int rpfs_setxattr(const char *path, const char *name, const char *value,
         return 0;
 }
 
-
 static int rpfs_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
                          off_t offset, struct fuse_file_info *fi)
 {
@@ -64,7 +64,7 @@ static int rpfs_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
         filler(buf, master_path + 1, NULL, 0);
         int i = 0;
         for (i; i < backupNum; i++) {
-            filler((void *)readBackups[i], nodeListing[i]+1, NULL, 0);
+            filler((void *)backups[i], nodeListing[i]+1, NULL, 0);
         }
         return 0;
 }
@@ -197,12 +197,12 @@ static int rpfs_checkCrash(struct fuse_file_info *fi){
         return -errno;
     }
     const char *currNodes;
-    rpfs_readdir("/", currNodes, fuse_filler_dir_t(void *buf, const char *name,
-                                const struct [Stat] *stbuf, off_t off) filler, 0, fi);
+    rpfs_readdir("/", currNodes,
+    fuse_filler_dir_t filler(void *buf, const char *name,const struct [Stat] *stbuf, off_t off) , 0, fi);
     int index=0;
     while(nodeListing[index] != NULL){
         if(strcmp(backups[index],nodeListing[index])!=0){
-            errMsg= rpfs_create(nodeListing[input],S_IFREG|0777,
+            errMsg= rpfs_create(nodeListing[index],S_IFREG|0777,
                                sizeof(nodeListing[index]), fi);
 
         }
