@@ -45,7 +45,7 @@ int copy_file(char *old_filename, char  *new_filename)
         int  a;
 
         ptr_old = fopen(old_filename, "rb");
-        ptr_new = fopen_s(new_filename, "wb");
+        ptr_new = fopen(new_filename, "wb");
 
         if(ptr_old == 0)
             return  -1;
