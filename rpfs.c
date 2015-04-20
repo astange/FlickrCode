@@ -124,7 +124,7 @@ static int checkValue(struct photo * p)
             int agreed = 0;
             fread(photosNodes, sizeof(photosNodes[0]), sizeof(photosNodes)/sizeof(photosNodes[0]),f);
             printf("%d%d%d\n", sizeof(photosNodes[0]), sizeof(struct photoBackup), sz/sizeof(photosNodes[0]));
-            for(j = 0; j < sizeof(photosNodes)/sizeof(photosNodes[0]); j++)
+            for(j = 0; j < sz/sizeof(photosNodes[0]); j++)
             {
                 printf("%llu\n", photosNodes[j].id);
                 if(p->id == photosNodes[j].id)
