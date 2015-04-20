@@ -254,7 +254,7 @@ static int rpfs_checkCrash(struct fuse_file_info *fi){
 }
 
 //creates nodes
-static int rpfs_init(int backups){
+static int rpfs_init(int backups,int argc, char *argv[]){
     backupNum=backups;
     int i = 0;
     char *intToChar;
@@ -268,7 +268,7 @@ static int rpfs_init(int backups){
         /*TO DO:
          Check failure events
          */
-        fopen(nodeListing[i], "w+");
+        fuse_main(argc, argv, &rpfs_oper, NULL);
     }
     return 0;
 }
@@ -289,6 +289,6 @@ static struct fuse_operations rpfs_oper = {
 };
 int main(int argc, char *argv[])
 {
-    rpfs_init(10);
+    rpfs_init(10, argc, argv);
     return fuse_main(argc, argv, &rpfs_oper, NULL);
 }
