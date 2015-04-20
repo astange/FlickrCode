@@ -89,8 +89,18 @@ static int stillAlive()
             if(nodesAlive[i] == 0)
             {
                 printf("Erasing!\n");
+                int otherIndex = 0;
+                int j;
+                for(j = 0; j < 10; j++)
+                {
+                    if(nodesAlive[j] == 1)
+                    {
+                        otherIndex = j;
+                        break;
+                    }
+                }
                 char filename2[100];
-                sprintf(filename2, "%s%d", name, i - 1);
+                sprintf(filename2, "%s%d", name, otherIndex);
                 remove(filename);
                 copy_file(filename2,filename);
             }
