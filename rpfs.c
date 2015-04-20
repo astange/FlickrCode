@@ -264,7 +264,7 @@ static int rpfs_write(const char *path, const char *buf, size_t size, off_t offs
     }
 
     char* instr = malloc(index);
-    char* filename = malloc(strlen(buf)-index);
+    char* filename = malloc(strlen(buf)-index - 1);
 
     memcpy(instr, buf, index);
     memcpy(filename, &buf[index+1], strlen(buf)-index);
