@@ -20,6 +20,18 @@ struct photo* photos = NULL;
 
 static const char *master_path = "/master.node";
 
+static int createBackup()
+{
+    char * name = "/tmp/test/backup_";
+    for(int i = 0; i < 10; i++)
+    {
+        char filename[100];
+        sprintf(filename, "%s%d", name, i);
+        FILE *f = fopen(filename, "w");
+        fclose(f);
+    }
+}
+
 static int rpfs_getattr(const char *path, struct stat *stbuf)
 {
         int res = 0;
@@ -162,5 +174,6 @@ static struct fuse_operations rpfs_oper = {
 };
 int main(int argc, char *argv[])
 {
+        createBackup();
         return fuse_main(argc, argv, &rpfs_oper, NULL);
 }
