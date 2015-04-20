@@ -23,7 +23,6 @@ struct photo {
 struct photo* photos = NULL;
 static const char *master_path = "/master.node";
 char **nodeListing;
-char **backups;
 int backupNum;
 
 
@@ -196,10 +195,10 @@ static int rpfs_checkCrash(struct fuse_file_info *fi){
     if(dp == NULL){
         return -errno;
     }
-    
-    while(nodeListing[index] != NULL){
+    int index = 0;
+    while(index < backupNum){
         if(fopen(nodeListing[index])!= NULL){
-            errMsg= rpfs_create(nodeListing[index],S_IFREG|0777,
+            errMsg = rpfs_create(nodeListing[index],S_IFREG|0777,
                                sizeof(nodeListing[index]), fi);
 
         }
