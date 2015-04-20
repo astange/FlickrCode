@@ -64,7 +64,7 @@ static int rpfs_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
         filler(buf, master_path + 1, NULL, 0);
         int i = 0;
         for (i; i < backupNum; i++) {
-            filler((void *)backups[i], nodeListing[i]+1, NULL, 0);
+            filler(buf, nodeListing[i]+1, NULL, 0);
         }
         return 0;
 }
@@ -196,11 +196,9 @@ static int rpfs_checkCrash(struct fuse_file_info *fi){
     if(dp == NULL){
         return -errno;
     }
-    const char *currNodes;
-    rpfs_readdir("/", currNodes,fuse_filler_dir_t filler, 0, fi);
-    int index=0;
+    
     while(nodeListing[index] != NULL){
-        if(strcmp(backups[index],nodeListing[index])!=0){
+        if(fopen(nodeListing[index])!= NULL){
             errMsg= rpfs_create(nodeListing[index],S_IFREG|0777,
                                sizeof(nodeListing[index]), fi);
 
