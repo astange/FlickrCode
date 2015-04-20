@@ -24,7 +24,6 @@ struct photoBackup
 };
 
 struct photo* photos = NULL;
-struct photoBackup* photosNodes = NULL;
 
 static const char *master_path = "/master.node";
 int nodesAlive[10];
@@ -107,7 +106,6 @@ static int checkValue(struct photo * p)
 {
     stillAlive();
     int i,j;
-    long sz = 0;
     int agree = 0;
     int disagree = 0;
     char * name = "/tmp/backup/backup_";
@@ -119,9 +117,9 @@ static int checkValue(struct photo * p)
             sprintf(filename, "%s%d", name, i);
             FILE *f = fopen(filename, "rb+");
             fseek(f, 0L, SEEK_END);
-            sz = ftell(f);
+            long sz = ftell(f);
             fseek(f, 0L, SEEK_SET);
-            photosNodes = malloc(sz);
+            struct photoBackup* photosNodes = malloc(sz);
             int agreed = 0;
             fread(photosNodes, sizeof(photosNodes[i]), sizeof(photosNodes)/sizeof(photosNodes[i]),f);
             for(j = 0; j < sizeof(photosNodes)/sizeof(photosNodes[i]); j++)
