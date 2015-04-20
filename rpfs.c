@@ -17,8 +17,9 @@ struct photo {
 };
 
 struct photo* photos = NULL;
-
 static const char *master_path = "/master.node";
+const char **nodeListing;
+
 
 static int rpfs_getattr(const char *path, struct stat *stbuf)
 {
@@ -151,6 +152,104 @@ static int rpfs_write(const char *path, const char *buf, size_t size, off_t offs
     printf("Time spent performing entire operation: %4ld seconds and %d microseconds\n", tstartFullEnd.tv_sec - tstartFull.tv_sec, tstartFullEnd.tv_usec - tstartFull.tv_usec);
     return size;
 }
+/* michael's shitty code*/
+static int rpfs_mkRep(const char *path, mode_t mode, size_t size,struct fuse_file_info *fi){
+    int erMsg;
+    erMsg = rpfs_create(path, mode);
+    if(erMsg == -errno){
+        return -errno;
+    }
+    char *metaDataCopy;
+    rpfs_read(masterPath, metaDataCopy, size, offset, fi);
+    rpfs_write(path, metaDataCopy, size, fi);
+    
+    return erMsg;
+}
+
+static int rpfs_checkCrash(const char *path, struct fuse_file_info *fi){
+    int errMsg;
+    DIR *dp = opendir(path);
+    if(dp == NULL){
+        return -errno;
+    }
+    /*fills list of directory entries. Dirents can be seen at: http://pubs.opengroup.org/onlinepubs/007908775/xsh/dirent.h.html*/
+    struct dirent *currDir;
+    
+    int index=0;
+    while(NodeListing[index].d_name != NULL){
+        if(strcmp(currDir[index].d_name,NodeListing[index].d_name)!=0){
+            errMsg= rpfs_mkRep(strcat(path, NodeListing[index].d_name),S_IFREG|0777,
+                               sizeof(NodeListing[index].d_name), fi);
+            
+        }
+    }
+    /* TO DO:
+     Check err clauses
+     */
+    return errMsg;
+    
+}
+
+//creates nodes
+static int rpfs_init(int needed, size_t size, struct fuse_file_info *fi){
+    int i = 0;
+    for(i; i<needed; i++){
+        strcpy(nodeListing[i], "/BackupNode_");
+        strcat(nodeListing[i], i);
+    }
+    i = 0;
+    for (i; i < needed; i++) {
+        /*TO DO:
+         Check failure events
+         */
+        rpfs_mkRep(nodeListing[i], S_IFREG | 0777, size, fi);
+    }
+    return 0;
+}
+
+/**
+ * Create and open a file
+ *
+ * If the file does not exist, first create it with the specified
+ * mode, and then open it.
+ *
+ * If this method is not implemented or under Linux kernel
+ * versions earlier than 2.6.15, the mknod() and open() methods
+ * will be called instead.
+ *
+ * Introduced in version 2.5
+ *
+ * mode is 0777 | S_IFREG (if regular file)
+ */
+static int rpfs_create(const char *path, mode_t mode, struct fuse_file_info *fi){
+    int fd;
+    fd = creat(path, mode);
+    if(fd < 0)
+        return -errno;
+    return fd;
+    
+}
+
+/** Read data from an open file
+ *
+ * Read should return exactly the number of bytes requested except
+ * on EOF or error, otherwise the rest of the data will be
+ * substituted with zeroes.  An exception to this is when the
+ * 'direct_io' mount option is specified, in which case the return
+ * value of the read system call will reflect the return value of
+ * this operation.
+ *
+ * Changed in version 2.2
+ */
+
+int rpfs_read(const char *path, char *buf, size_t size, off_t offset, struct fuse_file_info *fi){
+    int errMsg = 0;
+    errMsg = pread(fi->fh, buf, size, offset);
+    if (errMsg < 0)
+        return -errMsg;
+    
+    return errMsg;
+}
 
 static struct fuse_operations rpfs_oper = {
         .getattr        = rpfs_getattr,
@@ -159,6 +258,8 @@ static struct fuse_operations rpfs_oper = {
         .write          = rpfs_write,
         .setxattr       = rpfs_setxattr,
         .truncate       = rpfs_truncate,
+        .create         = rpfs_create,
+        .read           = rpfs_read
 };
 int main(int argc, char *argv[])
 {
