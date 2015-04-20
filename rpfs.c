@@ -126,7 +126,6 @@ static int checkValue(struct photo * p)
             {
                 if(p->id == photosNodes[j].id)
                 {
-                    printf("Agree!\n");
                     agree++;
                     agreed = 1;
                     break;
