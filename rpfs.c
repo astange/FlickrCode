@@ -8,6 +8,7 @@
 #include <sys/time.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <sys/stat.h>
 #include "uthash.h"
 #include "python_caller.h"
 
@@ -123,10 +124,7 @@ static int checkValue(struct photo * p)
             fseek(f, 0L, SEEK_SET);
             photosNodes = malloc(sz);
             int agreed = 0;
-            printf("%d\n", sizeof(photosNodes[i]));
-            printf("%d\n",sz/sizeof(struct photoBackup));
-            printf("%llu\n",p->id);
-            printf("%d\n",sizeof(photosNodes)/sizeof(photosNodes[0]));
+            fread(photosNodes, sizeof(photosNodes[i]), sizeof(photosNodes)/sizeof(photosNodes[i]),f);
             for(j = 0; j < sizeof(photosNodes)/sizeof(photosNodes[i]); j++)
             {
                 printf("%llu\n", photosNodes[i].id);
@@ -171,6 +169,7 @@ static int putValue(struct photo *p)
             char filename[100];
             sprintf(filename, "%s%d", name, i);
             FILE *f = fopen(filename, "a");
+            fwrite(&(p->id),sizeof(p->id), 1, f);
             fprintf(f, "%llu",p->id);
             fclose(f);
         }
