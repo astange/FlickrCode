@@ -23,7 +23,7 @@ struct photo {
 struct photo* photos = NULL;
 static const char *master_path = "/master.node";
 char **nodeListing = NULL;
-int backupNum;
+int backupNum = 0;
 
 
 static int rpfs_getattr(const char *path, struct stat *stbuf)
@@ -266,19 +266,19 @@ static struct fuse_operations rpfs_oper = {
 
 //creates nodes
 static int rpfs_init(int backups,int argc, char *argv[]){
-   /* backupNum=backups;
+    backupNum=backups;
     int i = 0;
     char *intToChar = NULL;
     for(i; i<backups; i++){
-        sprintf(intToChar, "%d", i);
+        *intToChar = "testing";
         strcpy(nodeListing[i], "/BackupNode_");
-        strcat(nodeListing[i], intToChar);
+        strcat(nodeListing[i], &((char)i));
     }
     i = 0;
     for (i; i < backups; i++) {
         printf("Created node %d", i);
         fuse_main(argc, argv, &rpfs_oper, NULL);
-    }*/
+    }
     return 0;
 }
 
