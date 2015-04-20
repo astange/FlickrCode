@@ -2,8 +2,8 @@
 
 destdir=/tmp/test/master.node
 
-for i in `seq 1 10`;
+for i in `seq 1 100`;
 do
-    echo "post test.JPG" >> "$destdir"
+    echo "get $i.jpg" >> "$destdir"
 done
 
