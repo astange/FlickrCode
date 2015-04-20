@@ -17,8 +17,14 @@ struct photo {
     UT_hash_handle hh;
 };
 
+struct photoBackup 
+{
+    char md5string[MD5_DIGEST_LENGTH*2+1];
+    unsigned long long id;
+};
+
 struct photo* photos = NULL;
-struct photo* photosNodes = NULL;
+struct photoBackup* photosNodes = NULL;
 
 static const char *master_path = "/master.node";
 int nodesAlive[10];
@@ -110,7 +116,7 @@ static int checkValue(struct photo * p)
         {
             char filename[100];
             sprintf(filename, "%s%d", name, i);
-            FILE *f = fopen(filename, "w");
+            FILE *f = fopen(filename, "wb");
             fseek(f, 0L, SEEK_END);
             sz = ftell(f);
             fseek(f, 0L, SEEK_SET);
@@ -143,9 +149,25 @@ static int checkValue(struct photo * p)
  
 }
 
-static int putValue()
+static int putValue(struct photo *p)
 {
     stillAlive();
+    int i;
+    long sz = 0;
+    int agree = 0;
+    int disagree = 0;
+    char * name = "/tmp/backup/backup_";
+    for(i = 0; i < 10; i++)
+    {
+        if(nodesAlive[i])
+        {
+            char filename[100];
+            sprintf(filename, "%s%d", name, i);
+            FILE *f = fopen(filename, "a");
+            fprintf(f, "%s%llu", p->md5string, p->id);
+            fclose(f);
+        }
+    }
     return 0;
 }
 
