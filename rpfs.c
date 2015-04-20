@@ -44,13 +44,13 @@ int copy_file(char *old_filename, char  *new_filename)
         int err = 0, err1 = 0;
         int  a;
 
-        err = fopen_s(&ptr_old, old_filename, "rb");
-        err1 = fopen_s(&ptr_new, new_filename, "wb");
+        ptr_old = fopen(old_filename, "rb");
+        ptr_new = fopen_s(new_filename, "wb");
 
-        if(err != 0)
+        if(ptr_old == 0)
             return  -1;
 
-        if(err1 != 0)
+        if(ptr_new == 0)
         {
             fclose(ptr_old);
             return  -1;
