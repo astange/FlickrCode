@@ -115,6 +115,7 @@ static int checkValue(struct photo * p)
         {
             char filename[100];
             sprintf(filename, "%s%d", name, i);
+            printf("%s\n",filename);
             FILE *f = fopen(filename, "rb+");
             fseek(f, 0L, SEEK_END);
             long sz = ftell(f);
