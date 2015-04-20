@@ -61,10 +61,10 @@ static int rpfs_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
         filler(buf, ".", NULL, 0);
         filler(buf, "..", NULL, 0);
         filler(buf, master_path + 1, NULL, 0);
-        int i = 0;
+        /*int i = 0;
         for (i; i < backupNum; i++) {
             filler(buf, nodeListing[i]+1, NULL, 0);
-        }
+        }*/
         return 0;
 }
 
@@ -88,7 +88,7 @@ static int rpfs_open(const char *path, struct fuse_file_info *fi)
 static int rpfs_write(const char *path, const char *buf, size_t size, off_t offset,
     struct fuse_file_info *fi) {
     
-    /*if(path != master_path && path != "/"){
+    if(path != master_path && path != "/"){
         int errMsg = 0;
         
         errMsg = pwrite(fi->fh, buf, size, offset);
@@ -96,7 +96,7 @@ static int rpfs_write(const char *path, const char *buf, size_t size, off_t offs
             return -errno;
         
         return errMsg;
-    }*/
+    }
     
     struct timeval tstartFull;
     struct timeval tstartFullEnd;
