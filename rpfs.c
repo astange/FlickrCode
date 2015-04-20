@@ -45,21 +45,6 @@ static int stillAlive()
     }
 }
 
-static int checkValue(struct photo * p, )
-{
-    stillAlive();
-    printf("Checking!\n");
-    return 0;
-}
-
-static int putValue()
-{
-    stillAlive();
-    removeNode(1);
-    printf("Putting!\n");
-    return 0;
-}
-
 static int removeNode(int i)
 {
     char * name = "/tmp/test/backup_";
@@ -74,6 +59,21 @@ static int removeNode(int i)
 static int addNode(int i)
 {
 
+}
+
+static int checkValue(struct photo * p, )
+{
+    stillAlive();
+    printf("Checking!\n");
+    return 0;
+}
+
+static int putValue()
+{
+    stillAlive();
+    removeNode(1);
+    printf("Putting!\n");
+    return 0;
 }
 
 static int rpfs_getattr(const char *path, struct stat *stbuf)
