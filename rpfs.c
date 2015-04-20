@@ -111,14 +111,14 @@ static int checkValue(struct photo * p)
             char filename[100];
             sprintf(filename, "%s%d", name, i);
             FILE *f = fopen(filename, "w");
-            fseek(fp, 0L, SEEK_END);
-            sz = ftell(fp);
-            fseek(fp, 0L, SEEK_SET);
+            fseek(f, 0L, SEEK_END);
+            sz = ftell(f);
+            fseek(f, 0L, SEEK_SET);
             photosNodes = malloc(sz);
             int agreed = 0;
             for(j = 0; j < sizeof(photosNodes)/sizeof(photosNodes[i]); j++)
             {
-                if(p->id == photosNodes[i]->id)
+                if(p->id == photosNodes[i].id)
                 {
                     agree++;
                     agreed = 1;
