@@ -19,7 +19,7 @@ struct photo {
 struct photo* photos = NULL;
 
 static const char *master_path = "/master.node";
-bool nodesAlive[10];
+int nodesAlive[10];
 
 static int createBackup()
 {
@@ -35,8 +35,7 @@ static int createBackup()
     }
     return 0;
 }
-
-static 
+ 
 
 static int rpfs_getattr(const char *path, struct stat *stbuf)
 {
