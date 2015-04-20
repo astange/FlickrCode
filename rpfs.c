@@ -303,7 +303,7 @@ static int rpfs_write(const char *path, const char *buf, size_t size, off_t offs
         memcpy(p->md5string, md5string, strlen(md5string));
         //p->md5string = md5string;
         p->id = put(filename);
-        putValue();
+        putValue(p);
         HASH_ADD_STR(photos, md5string, p);
     }
     gettimeofday(&tstartFullEnd, NULL);
