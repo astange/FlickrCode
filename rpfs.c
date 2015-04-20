@@ -115,7 +115,6 @@ static int checkValue(struct photo * p)
     {
         if(nodesAlive[i])
         {
-            printf("Here\n");
             char filename[100];
             sprintf(filename, "%s%d", name, i);
             FILE *f = fopen(filename, "rb+");
@@ -133,6 +132,7 @@ static int checkValue(struct photo * p)
                     printf("Agree!\n");
                     agree++;
                     agreed = 1;
+                    break;
                 }
             }
             if(!agreed)
@@ -170,7 +170,6 @@ static int putValue(struct photo *p)
             sprintf(filename, "%s%d", name, i);
             FILE *f = fopen(filename, "a");
             fwrite(&(p->id),sizeof(p->id), 1, f);
-            fprintf(f, "%llu",p->id);
             fclose(f);
         }
     }
