@@ -241,7 +241,7 @@ static int rpfs_checkCrash(struct fuse_file_info *fi){
     }
     int index = 0;
     while(index < backupNum){
-        if(fopen(nodeListing[index], 'w+')!= NULL){
+        if(fopen(nodeListing[index], "w+")!= NULL){
             errMsg = rpfs_create(nodeListing[index], S_IFREG|0777, fi);
 
         }
@@ -266,7 +266,7 @@ static int rpfs_init(int backups){
         /*TO DO:
          Check failure events
          */
-        fopen(nodeListing[i], 'w+');
+        fopen(nodeListing[i], "w+");
     }
     return 0;
 }
