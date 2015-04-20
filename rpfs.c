@@ -143,12 +143,6 @@ static int rpfs_write(const char *path, const char *buf, size_t size, off_t offs
     if (strcmp(instr, "get")!=0 && strcmp(instr, "post")!=0)
         return -ENOENT;
 
-    // Check filename path validity, maybe not needed
-    for (i=0; i<strlen(filename); i++)
-        if (filename[i]=='/')
-            return -ENOENT;
-
-
     // Hash
     unsigned char digest[MD5_DIGEST_LENGTH];
     MD5_CTX context;
