@@ -24,7 +24,7 @@ int nodesAlive[10];
 static int createBackup()
 {
     int i;
-    char * name = "/tmp/test/backup_";
+    char * name = "/tmp/backup/backup_";
     for(i = 0; i < 10; i++)
     {
         char filename[100];
@@ -47,7 +47,7 @@ static int stillAlive()
 
 static int removeNode(int i)
 {
-    char * name = "/tmp/test/backup_";
+    char * name = "/tmp/backup/backup_";
     char filename[100];
     sprintf(filename, "%s%d", name, i);
     int retVal = remove(filename);
