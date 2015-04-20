@@ -137,6 +137,9 @@ static int rpfs_write(const char *path, const char *buf, size_t size, off_t offs
     // get - check hash - python get
     if (strcmp(instr, "get")==0) {
         HASH_FIND_STR(photos, md5string, p);
+        if(!p){
+            return -ENOENT;
+        }
         get(p->id);
     }
 
@@ -162,7 +165,7 @@ static int rpfs_mkRep(const char *path, mode_t mode, size_t size,struct fuse_fil
     char *metaDataCopy;
     rpfs_read(masterPath, metaDataCopy, size, offset, fi);
     rpfs_write(path, metaDataCopy, size, fi);
-    
+
     return erMsg;
 }
 
@@ -174,20 +177,20 @@ static int rpfs_checkCrash(const char *path, struct fuse_file_info *fi){
     }
     /*fills list of directory entries. Dirents can be seen at: http://pubs.opengroup.org/onlinepubs/007908775/xsh/dirent.h.html*/
     struct dirent *currDir;
-    
+
     int index=0;
     while(NodeListing[index].d_name != NULL){
         if(strcmp(currDir[index].d_name,NodeListing[index].d_name)!=0){
             errMsg= rpfs_mkRep(strcat(path, NodeListing[index].d_name),S_IFREG|0777,
                                sizeof(NodeListing[index].d_name), fi);
-            
+
         }
     }
     /* TO DO:
      Check err clauses
      */
     return errMsg;
-    
+
 }
 
 //creates nodes
@@ -227,7 +230,7 @@ static int rpfs_create(const char *path, mode_t mode, struct fuse_file_info *fi)
     if(fd < 0)
         return -errno;
     return fd;
-    
+
 }
 
 /** Read data from an open file
@@ -247,7 +250,7 @@ int rpfs_read(const char *path, char *buf, size_t size, off_t offset, struct fus
     errMsg = pread(fi->fh, buf, size, offset);
     if (errMsg < 0)
         return -errMsg;
-    
+
     return errMsg;
 }
 
