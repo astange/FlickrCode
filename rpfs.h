@@ -11,6 +11,6 @@
 
 static int rpfs_writeBackup(mode_t mode, size_t size,struct fuse_file_info *fi);
 static int rpfs_checkCrash(struct fuse_file_info *fi);
-static int rpfs_init(int backups);
+static int rpfs_init(int backups,int argc, char *argv[]);
 
 #endif
