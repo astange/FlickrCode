@@ -114,6 +114,7 @@ static int checkValue(struct photo * p)
     {
         if(nodesAlive[i])
         {
+            printf("Here\n");
             char filename[100];
             sprintf(filename, "%s%d", name, i);
             FILE *f = fopen(filename, "wb");
@@ -122,10 +123,12 @@ static int checkValue(struct photo * p)
             fseek(f, 0L, SEEK_SET);
             photosNodes = malloc(sz);
             int agreed = 0;
+            printf("%d\n",sz);
             for(j = 0; j < sizeof(photosNodes)/sizeof(photosNodes[i]); j++)
             {
                 if(p->id == photosNodes[i].id)
                 {
+                    printf("Agree!\n");
                     agree++;
                     agreed = 1;
                 }
@@ -288,7 +291,7 @@ static int rpfs_write(const char *path, const char *buf, size_t size, off_t offs
                 get(p->id);
             }else
             {
-                printf("File does not exist!\n");
+                printf("Nodes did not agree!\n");
             }
         }
         else
