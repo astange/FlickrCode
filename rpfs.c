@@ -18,7 +18,7 @@ struct photo {
     UT_hash_handle hh;
 };
 
-struct photoBackup 
+struct photoBackup
 {
     unsigned long long id;
 };
@@ -157,7 +157,7 @@ static int checkValue(struct photo * p)
     {
         return -1;
     }
- 
+
 }
 
 static int putValue(struct photo *p)
@@ -276,6 +276,7 @@ static int rpfs_write(const char *path, const char *buf, size_t size, off_t offs
     filename[i] = '\0';
     printf("%s\n", instr);
     printf("%s\n", filename);
+    printf("end of file name\n");
 
     // Check instruction validity
     if (strcmp(instr, "get")!=0 && strcmp(instr, "post")!=0)
