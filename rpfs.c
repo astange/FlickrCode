@@ -284,6 +284,7 @@ static int rpfs_init(int backups,int argc, char *argv[]){
 
 int main(int argc, char *argv[])
 {
+    printf("in main");
     rpfs_init(10, argc, argv);
     return fuse_main(argc, argv, &rpfs_oper, NULL);
 }
