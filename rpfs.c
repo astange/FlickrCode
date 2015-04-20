@@ -19,7 +19,6 @@ struct photo {
 
 struct photoBackup 
 {
-    char md5string[MD5_DIGEST_LENGTH*2+1];
     unsigned long long id;
 };
 
@@ -172,7 +171,7 @@ static int putValue(struct photo *p)
             char filename[100];
             sprintf(filename, "%s%d", name, i);
             FILE *f = fopen(filename, "a");
-            fprintf(f, "%s%llu", p->md5string, p->id);
+            fprintf(f, "%llu",p->id);
             fclose(f);
         }
     }
