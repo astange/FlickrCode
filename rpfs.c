@@ -257,7 +257,7 @@ static int rpfs_checkCrash(struct fuse_file_info *fi){
 static int rpfs_init(int backups){
     backupNum=backups;
     int i = 0;
-    char intToChar;
+    char *intToChar;
     for(i; i<backups; i++){
         sprintf(intToChar, "%d", i);
         strcpy(nodeListing[i], "/BackupNode_");
