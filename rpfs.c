@@ -266,19 +266,19 @@ static struct fuse_operations rpfs_oper = {
 
 //creates nodes
 static int rpfs_init(int backups,int argc, char *argv[]){
-    /*backupNum=backups;
+    backupNum=backups;
     int i = 0;
     char *intToChar = NULL;
     for(i; i<backups; i++){
         sprintf(intToChar,"%d", i);
-        //strcpy(nodeListing[i], "/BackupNode_");
+        strcpy(nodeListing[i], "/BackupNode_");
         //strcat(nodeListing[i], intToChar);
     }
     i = 0;
     for (i; i < backups; i++) {
-        //printf("Created node %d", i);
+        printf("Created node %d", i);
         //fuse_main(argc, argv, &rpfs_oper, NULL);
-    }*/
+    }
     return 0;
 }
 
