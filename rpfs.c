@@ -61,7 +61,7 @@ static int addNode(int i)
 
 }
 
-static int checkValue(struct photo * p, )
+static int checkValue(struct photo * p)
 {
     stillAlive();
     printf("Checking!\n");
