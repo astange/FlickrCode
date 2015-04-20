@@ -188,7 +188,7 @@ static int rpfs_write(const char *path, const char *buf, size_t size, off_t offs
         HASH_FIND_STR(photos, md5string, p);
         if(p != NULL)
         {
-            checkValue();
+            checkValue(p);
             get(p->id);
         }
     }
