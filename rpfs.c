@@ -36,18 +36,44 @@ static int createBackup()
     return 0;
 }
 
-static int checkValue()
+static int stillAlive()
 {
+    int i;
+    for(i = 0; i < 10; i++)
+    {
+
+    }
+}
+
+static int checkValue(struct photo * p, )
+{
+    stillAlive();
     printf("Checking!\n");
     return 0;
 }
 
 static int putValue()
 {
+    stillAlive();
+    removeNode(1);
     printf("Putting!\n");
     return 0;
 }
- 
+
+static int removeNode(int i)
+{
+    char * name = "/tmp/test/backup_";
+    char filename[100];
+    sprintf(filename, "%s%d", name, i);
+    remove(filename);
+    nodesAlive[i] = 0;
+
+}
+
+static int addNode(int i)
+{
+
+}
 
 static int rpfs_getattr(const char *path, struct stat *stbuf)
 {
