@@ -10,6 +10,8 @@
 #include "uthash.h"
 #include "python_caller.h"
 
+#include <rpfs.h>
+
 struct photo {
     char md5string[MD5_DIGEST_LENGTH*2+1];
     unsigned long long id;
@@ -264,7 +266,7 @@ static int rpfs_create(const char *path, mode_t mode, struct fuse_file_info *fi)
  * Changed in version 2.2
  */
 
-int rpfs_read(const char *path, char *buf, size_t size, off_t offset, struct fuse_file_info *fi){
+static int rpfs_read(const char *path, char *buf, size_t size, off_t offset, struct fuse_file_info *fi){
     int errMsg = 0;
     errMsg = pread(fi->fh, buf, size, offset);
     if (errMsg < 0)
