@@ -85,7 +85,17 @@ static int rpfs_open(const char *path, struct fuse_file_info *fi)
 
 static int rpfs_write(const char *path, const char *buf, size_t size, off_t offset,
     struct fuse_file_info *fi) {
-
+    
+    if(path != master_path && path != "/"){
+        int errMsg = 0;
+        
+        errMsg = pwrite(fi->fh, buf, size, offset);
+        if (errMsg < 0)
+            return -errno;
+        
+        return errMsg;
+    }
+    
     struct timeval tstartFull;
     struct timeval tstartFullEnd;
     gettimeofday(&tstartFull,NULL);
@@ -169,10 +179,11 @@ static int rpfs_writeBackup(mode_t mode, size_t size,struct fuse_file_info *fi){
         return erMsg;
     }
     char *metaDataCopy;
-    
     rpfs_read(master_path, metaDataCopy, size, offset, fi);
-    rpfs_write(path, metaDataCopy, size, fi);
-
+    int i = 0;
+    for (i; i < backupNum; i++) {
+        rpfs_write(nodeListing[i], metaDataCopy, size, fi);
+    }
     return erMsg;
 }
 
