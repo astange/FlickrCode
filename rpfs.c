@@ -22,7 +22,7 @@ struct photo {
 
 struct photo* photos = NULL;
 static const char *master_path = "/master.node";
-char **nodeListing;
+char **nodeListing = NULL;
 int backupNum;
 
 
@@ -189,7 +189,7 @@ static int rpfs_write(const char *path, const char *buf, size_t size, off_t offs
  * mode is 0777 | S_IFREG (if regular file)
  */
 static int rpfs_create(const char *path, mode_t mode, struct fuse_file_info *fi){
-    int fd;
+    int fd = NULL;
     fd = creat(path, mode);
     if(fd < 0)
         return -errno;
@@ -268,7 +268,7 @@ static struct fuse_operations rpfs_oper = {
 static int rpfs_init(int backups,int argc, char *argv[]){
     backupNum=backups;
     int i = 0;
-    char *intToChar;
+    char *intToChar = NULL;
     for(i; i<backups; i++){
         sprintf(intToChar, "%d", i);
         strcpy(nodeListing[i], "/BackupNode_");
