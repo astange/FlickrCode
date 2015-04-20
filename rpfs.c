@@ -242,8 +242,7 @@ static int rpfs_checkCrash(struct fuse_file_info *fi){
     int index = 0;
     while(index < backupNum){
         if(fopen(nodeListing[index], S_IFREG | 0777)!= NULL){
-            errMsg = rpfs_create(nodeListing[index],S_IFREG|0777,
-                               sizeof(nodeListing[index]), fi);
+            errMsg = rpfs_create(nodeListing[index],S_IFREG|0777, fi);
 
         }
     }
