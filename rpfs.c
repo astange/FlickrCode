@@ -19,6 +19,8 @@ struct photo {
 struct photo* photos = NULL;
 static const char *master_path = "/master.node";
 const char **nodeListing;
+const char **readBackups;
+int backupNum;
 
 
 static int rpfs_getattr(const char *path, struct stat *stbuf)
@@ -57,6 +59,10 @@ static int rpfs_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
         filler(buf, ".", NULL, 0);
         filler(buf, "..", NULL, 0);
         filler(buf, master_path + 1, NULL, 0);
+        int i = 0;
+        for (i; i < backupNum; i++) {
+            filler(readBackups[i], nodeListing[i]+1, NULL, 0);
+        }
         return 0;
 }
 
@@ -156,33 +162,34 @@ static int rpfs_write(const char *path, const char *buf, size_t size, off_t offs
     return size;
 }
 /* michael's shitty code*/
-static int rpfs_mkRep(const char *path, mode_t mode, size_t size,struct fuse_file_info *fi){
+static int rpfs_writeBackup(mode_t mode, size_t size,struct fuse_file_info *fi){
     int erMsg;
-    erMsg = rpfs_create(path, mode);
-    if(erMsg == -errno){
-        return -errno;
+    erMsg = rpfs_checkCrash(fi);
+    if(erMsg < 0){
+        return erMsg;
     }
     char *metaDataCopy;
-    rpfs_read(masterPath, metaDataCopy, size, offset, fi);
+    
+    rpfs_read(master_path, metaDataCopy, size, offset, fi);
     rpfs_write(path, metaDataCopy, size, fi);
 
     return erMsg;
 }
 
-static int rpfs_checkCrash(const char *path, struct fuse_file_info *fi){
+static int rpfs_checkCrash(struct fuse_file_info *fi){
     int errMsg;
-    DIR *dp = opendir(path);
+    DIR *dp = opendir("/");
     if(dp == NULL){
         return -errno;
     }
-    /*fills list of directory entries. Dirents can be seen at: http://pubs.opengroup.org/onlinepubs/007908775/xsh/dirent.h.html*/
-    struct dirent *currDir;
-
+    const char *currNodes;
+    rpfs_readdir("/", currNodes, fuse_filler_dir_t(void *buf, const char *name,
+                                const struct [Stat] *stbuf, off_t off) filler, 0, fi);
     int index=0;
-    while(NodeListing[index].d_name != NULL){
-        if(strcmp(currDir[index].d_name,NodeListing[index].d_name)!=0){
-            errMsg= rpfs_mkRep(strcat(path, NodeListing[index].d_name),S_IFREG|0777,
-                               sizeof(NodeListing[index].d_name), fi);
+    while(nodeListing[index] != NULL){
+        if(strcmp(backups[index],nodeListing[index])!=0){
+            errMsg= rpfs_create(nodeListing[input],S_IFREG|0777,
+                               sizeof(nodeListing[index]), fi);
 
         }
     }
@@ -194,18 +201,19 @@ static int rpfs_checkCrash(const char *path, struct fuse_file_info *fi){
 }
 
 //creates nodes
-static int rpfs_init(int needed, size_t size, struct fuse_file_info *fi){
+static int rpfs_init(int backups){
+    backupNum=backups;
     int i = 0;
-    for(i; i<needed; i++){
+    for(i; i<backups; i++){
         strcpy(nodeListing[i], "/BackupNode_");
         strcat(nodeListing[i], i);
     }
     i = 0;
-    for (i; i < needed; i++) {
+    for (i; i < backups; i++) {
         /*TO DO:
          Check failure events
          */
-        rpfs_mkRep(nodeListing[i], S_IFREG | 0777, size, fi);
+        fopen(nodeListing[i], S_IFREG | 0777);
     }
     return 0;
 }
@@ -266,5 +274,6 @@ static struct fuse_operations rpfs_oper = {
 };
 int main(int argc, char *argv[])
 {
-        return fuse_main(argc, argv, &rpfs_oper, NULL);
+    rpfs_init(10);
+    return fuse_main(argc, argv, &rpfs_oper, NULL);
 }
