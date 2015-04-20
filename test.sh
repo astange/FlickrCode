@@ -1,9 +1,9 @@
 #!/bin/bash
 
-destdir=/tmp/test.txt
+destdir=/tmp/test/master.node
 
 for i in `seq 1 10`;
 do
-    echo "$i.jpg" >> "$destdir"
+    echo "post test.JPG" >> "$destdir"
 done
 
