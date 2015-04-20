@@ -193,7 +193,7 @@ static int rpfs_create(const char *path, mode_t mode, struct fuse_file_info *fi)
     fd = creat(path, mode);
     if(fd < 0)
         return -errno;*/
-    return fd;
+    return 0;
     
 }
 
