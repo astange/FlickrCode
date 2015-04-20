@@ -65,7 +65,8 @@ static int removeNode(int i)
     char * name = "/tmp/test/backup_";
     char filename[100];
     sprintf(filename, "%s%d", name, i);
-    remove(filename);
+    int retVal = remove(filename);
+    printf("RetVAL! %d\n", retVal);
     nodesAlive[i] = 0;
 
 }
