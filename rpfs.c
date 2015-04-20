@@ -124,8 +124,10 @@ static int checkValue(struct photo * p)
             photosNodes = malloc(sz);
             int agreed = 0;
             printf("%d\n",sz);
+            printf("%llu\n",p->id);
             for(j = 0; j < sizeof(photosNodes)/sizeof(photosNodes[i]); j++)
             {
+                printf("%llu\n", photosNodes.id);
                 if(p->id == photosNodes[i].id)
                 {
                     printf("Agree!\n");
