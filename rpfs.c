@@ -7,12 +7,8 @@
 #include <fuse.h>
 #include <sys/time.h>
 #include <fcntl.h>
-#include <dirent.h>
 #include "uthash.h"
 #include "python_caller.h"
-#include "rpfs.h"
-
-
 
 struct photo {
     char md5string[MD5_DIGEST_LENGTH*2+1];
@@ -21,10 +17,8 @@ struct photo {
 };
 
 struct photo* photos = NULL;
-static const char *master_path = "/master.node";
-char **nodeListing;
-int backupNum;
 
+static const char *master_path = "/master.node";
 
 static int rpfs_getattr(const char *path, struct stat *stbuf)
 {
@@ -51,6 +45,7 @@ static int rpfs_setxattr(const char *path, const char *name, const char *value,
         return 0;
 }
 
+
 static int rpfs_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
                          off_t offset, struct fuse_file_info *fi)
 {
@@ -61,10 +56,6 @@ static int rpfs_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
         filler(buf, ".", NULL, 0);
         filler(buf, "..", NULL, 0);
         filler(buf, master_path + 1, NULL, 0);
-        int i = 0;
-        for (i; i < backupNum; i++) {
-            filler(buf, nodeListing[i]+1, NULL, 0);
-        }
         return 0;
 }
 
@@ -87,17 +78,7 @@ static int rpfs_open(const char *path, struct fuse_file_info *fi)
 
 static int rpfs_write(const char *path, const char *buf, size_t size, off_t offset,
     struct fuse_file_info *fi) {
-    
-    if(path != master_path && path != "/"){
-        int errMsg = 0;
-        
-        errMsg = pwrite(fi->fh, buf, size, offset);
-        if (errMsg < 0)
-            return -errno;
-        
-        return errMsg;
-    }
-    
+
     struct timeval tstartFull;
     struct timeval tstartFullEnd;
     gettimeofday(&tstartFull,NULL);
@@ -155,9 +136,6 @@ static int rpfs_write(const char *path, const char *buf, size_t size, off_t offs
     // get - check hash - python get
     if (strcmp(instr, "get")==0) {
         HASH_FIND_STR(photos, md5string, p);
-        if(!p){
-            return -ENOENT;
-        }
         get(p->id);
     }
 
@@ -173,107 +151,6 @@ static int rpfs_write(const char *path, const char *buf, size_t size, off_t offs
     printf("Time spent performing entire operation: %4ld seconds and %d microseconds\n", tstartFullEnd.tv_sec - tstartFull.tv_sec, tstartFullEnd.tv_usec - tstartFull.tv_usec);
     return size;
 }
-/* michael's shitty code*/
-/**
- * Create and open a file
- *
- * If the file does not exist, first create it with the specified
- * mode, and then open it.
- *
- * If this method is not implemented or under Linux kernel
- * versions earlier than 2.6.15, the mknod() and open() methods
- * will be called instead.
- *
- * Introduced in version 2.5
- *
- * mode is 0777 | S_IFREG (if regular file)
- */
-static int rpfs_create(const char *path, mode_t mode, struct fuse_file_info *fi){
-    int fd;
-    fd = creat(path, mode);
-    if(fd < 0)
-        return -errno;
-    return fd;
-    
-}
-
-/** Read data from an open file
- *
- * Read should return exactly the number of bytes requested except
- * on EOF or error, otherwise the rest of the data will be
- * substituted with zeroes.  An exception to this is when the
- * 'direct_io' mount option is specified, in which case the return
- * value of the read system call will reflect the return value of
- * this operation.
- *
- * Changed in version 2.2
- */
-
-static int rpfs_read(const char *path, char *buf, size_t size, off_t offset, struct fuse_file_info *fi){
-    int errMsg = 0;
-    errMsg = pread(fi->fh, buf, size, offset);
-    if (errMsg < 0)
-        return -errMsg;
-    
-    return errMsg;
-}
-
-static int rpfs_writeBackup(mode_t mode, size_t size,struct fuse_file_info *fi){
-    int erMsg;
-    erMsg = rpfs_checkCrash(fi);
-    if(erMsg < 0){
-        return erMsg;
-    }
-    char *metaDataCopy;
-    rpfs_read(master_path, metaDataCopy, size, 0, fi);
-    int i = 0;
-    for (i; i < backupNum; i++) {
-        rpfs_write(nodeListing[i], metaDataCopy, size, 0, fi);
-    }
-    return erMsg;
-}
-
-static int rpfs_checkCrash(struct fuse_file_info *fi){
-    int errMsg;
-    DIR *dp = opendir("/");
-    if(dp == NULL){
-        return -errno;
-    }
-    int index = 0;
-    while(index < backupNum){
-        if(fopen(nodeListing[index], 'w+')!= NULL){
-            errMsg = rpfs_create(nodeListing[index], S_IFREG|0777, fi);
-
-        }
-    }
-    /* TO DO:
-     Check err clauses
-     */
-    return errMsg;
-
-}
-
-//creates nodes
-static int rpfs_init(int backups){
-    backupNum=backups;
-    int i = 0;
-    for(i; i<backups; i++){
-        strcpy(nodeListing[i], "/BackupNode_");
-        strcat(nodeListing[i], char(i));
-    }
-    i = 0;
-    for (i; i < backups; i++) {
-        /*TO DO:
-         Check failure events
-         */
-        fopen(nodeListing[i], 'w+');
-    }
-    return 0;
-}
-
-
-
-
 
 static struct fuse_operations rpfs_oper = {
         .getattr        = rpfs_getattr,
@@ -282,11 +159,8 @@ static struct fuse_operations rpfs_oper = {
         .write          = rpfs_write,
         .setxattr       = rpfs_setxattr,
         .truncate       = rpfs_truncate,
-        .create         = rpfs_create,
-        .read           = rpfs_read
 };
 int main(int argc, char *argv[])
 {
-    rpfs_init(10);
-    return fuse_main(argc, argv, &rpfs_oper, NULL);
+        return fuse_main(argc, argv, &rpfs_oper, NULL);
 }
