@@ -273,7 +273,7 @@ static int rpfs_write(const char *path, const char *buf, size_t size, off_t offs
     {
         i++;
     }
-    filename[i] = '\0';
+    instr[i] = '\0';
 
     printf("%s\n", instr);
     printf("%s\n", filename);
