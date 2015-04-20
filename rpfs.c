@@ -267,13 +267,7 @@ static int rpfs_write(const char *path, const char *buf, size_t size, off_t offs
     char* filename = malloc(strlen(buf)-index-1);
 
     memcpy(instr, buf, index);
-    memcpy(filename, &buf[index+1], strlen(buf)-index);
-    i = 0;
-    while(instr[i] != ' ' || instr[i] != '\0')
-    {
-        i++;
-    }
-    instr[i] = '\0';
+    memcpy(filename, &buf[index+1], strlen(buf)-index-1);
 
     printf("%s\n", instr);
     printf("%s\n", filename);
