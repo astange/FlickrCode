@@ -31,10 +31,12 @@ static int createBackup()
         sprintf(filename, "%s%d", name, i);
         FILE *f = fopen(filename, "w");
         fclose(f);
-        nodesAlive[i] = true;
+        nodesAlive[i] = 1;
     }
-    printf("Hello\n");
+    return 0;
 }
+
+static 
 
 static int rpfs_getattr(const char *path, struct stat *stbuf)
 {
