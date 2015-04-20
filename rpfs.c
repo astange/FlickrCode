@@ -38,7 +38,7 @@ static int createBackup()
     return 0;
 }
 
-int copy_file(char *old_filename, char  *new_filename)
+static int copy_file(char *old_filename, char  *new_filename)
     {
         FILE  *ptr_old, *ptr_new;
         int err = 0, err1 = 0;
@@ -99,15 +99,38 @@ static int stillAlive()
 static int checkValue(struct photo * p)
 {
     stillAlive();
-    int i;
+    int i,j;
+    long sz = 0;
     int agree = 0;
     int disagree = 0;
     char * name = "/tmp/backup/backup_";
     for(i = 0; i < 10; i++)
     {
-        char filename[100];
-        sprintf(filename, "%s%d", name, i);
-
+        if(nodesAlive[i])
+        {
+            char filename[100];
+            sprintf(filename, "%s%d", name, i);
+            FILE *f = fopen(filename, "w");
+            fseek(fp, 0L, SEEK_END);
+            sz = ftell(fp);
+            fseek(fp, 0L, SEEK_SET);
+            photosNodes = malloc(sz);
+            int agreed = 0;
+            for(j = 0; j < sizeof(photosNodes)/sizeof(photosNodes[i]); j++)
+            {
+                if(p->id == photosNodes[i]->id)
+                {
+                    agree++;
+                    agreed = 1;
+                }
+            }
+            if(!agreed)
+            {
+                disagree++;
+            }
+            free(photosNodes);
+            fclose(f);
+        }
     }
     if(agree >= disagree)
     {
@@ -123,7 +146,6 @@ static int checkValue(struct photo * p)
 static int putValue()
 {
     stillAlive();
-    printf("Putting!\n");
     return 0;
 }
 
