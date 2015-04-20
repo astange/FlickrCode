@@ -253,6 +253,17 @@ static int rpfs_checkCrash(struct fuse_file_info *fi){
 
 }
 
+static struct fuse_operations rpfs_oper = {
+        .getattr        = rpfs_getattr,
+        .readdir        = rpfs_readdir,
+        .open           = rpfs_open,
+        .write          = rpfs_write,
+        .setxattr       = rpfs_setxattr,
+        .truncate       = rpfs_truncate,
+        .create         = rpfs_create,
+        .read           = rpfs_read
+};
+
 //creates nodes
 static int rpfs_init(int backups,int argc, char *argv[]){
     backupNum=backups;
@@ -273,20 +284,6 @@ static int rpfs_init(int backups,int argc, char *argv[]){
     return 0;
 }
 
-
-
-
-
-static struct fuse_operations rpfs_oper = {
-        .getattr        = rpfs_getattr,
-        .readdir        = rpfs_readdir,
-        .open           = rpfs_open,
-        .write          = rpfs_write,
-        .setxattr       = rpfs_setxattr,
-        .truncate       = rpfs_truncate,
-        .create         = rpfs_create,
-        .read           = rpfs_read
-};
 int main(int argc, char *argv[])
 {
     rpfs_init(10, argc, argv);
