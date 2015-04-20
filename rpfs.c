@@ -174,6 +174,50 @@ static int rpfs_write(const char *path, const char *buf, size_t size, off_t offs
     return size;
 }
 /* michael's shitty code*/
+/**
+ * Create and open a file
+ *
+ * If the file does not exist, first create it with the specified
+ * mode, and then open it.
+ *
+ * If this method is not implemented or under Linux kernel
+ * versions earlier than 2.6.15, the mknod() and open() methods
+ * will be called instead.
+ *
+ * Introduced in version 2.5
+ *
+ * mode is 0777 | S_IFREG (if regular file)
+ */
+static int rpfs_create(const char *path, mode_t mode, struct fuse_file_info *fi){
+    int fd;
+    fd = creat(path, mode);
+    if(fd < 0)
+        return -errno;
+    return fd;
+    
+}
+
+/** Read data from an open file
+ *
+ * Read should return exactly the number of bytes requested except
+ * on EOF or error, otherwise the rest of the data will be
+ * substituted with zeroes.  An exception to this is when the
+ * 'direct_io' mount option is specified, in which case the return
+ * value of the read system call will reflect the return value of
+ * this operation.
+ *
+ * Changed in version 2.2
+ */
+
+static int rpfs_read(const char *path, char *buf, size_t size, off_t offset, struct fuse_file_info *fi){
+    int errMsg = 0;
+    errMsg = pread(fi->fh, buf, size, offset);
+    if (errMsg < 0)
+        return -errMsg;
+    
+    return errMsg;
+}
+
 static int rpfs_writeBackup(mode_t mode, size_t size,struct fuse_file_info *fi){
     int erMsg;
     erMsg = rpfs_checkCrash(fi);
@@ -197,7 +241,7 @@ static int rpfs_checkCrash(struct fuse_file_info *fi){
     }
     int index = 0;
     while(index < backupNum){
-        if(fopen(nodeListing[index])!= NULL){
+        if(fopen(nodeListing[index], S_IFREG | 0777)!= NULL){
             errMsg = rpfs_create(nodeListing[index],S_IFREG|0777,
                                sizeof(nodeListing[index]), fi);
 
@@ -228,49 +272,9 @@ static int rpfs_init(int backups){
     return 0;
 }
 
-/**
- * Create and open a file
- *
- * If the file does not exist, first create it with the specified
- * mode, and then open it.
- *
- * If this method is not implemented or under Linux kernel
- * versions earlier than 2.6.15, the mknod() and open() methods
- * will be called instead.
- *
- * Introduced in version 2.5
- *
- * mode is 0777 | S_IFREG (if regular file)
- */
-static int rpfs_create(const char *path, mode_t mode, struct fuse_file_info *fi){
-    int fd;
-    fd = creat(path, mode);
-    if(fd < 0)
-        return -errno;
-    return fd;
 
-}
 
-/** Read data from an open file
- *
- * Read should return exactly the number of bytes requested except
- * on EOF or error, otherwise the rest of the data will be
- * substituted with zeroes.  An exception to this is when the
- * 'direct_io' mount option is specified, in which case the return
- * value of the read system call will reflect the return value of
- * this operation.
- *
- * Changed in version 2.2
- */
 
-static int rpfs_read(const char *path, char *buf, size_t size, off_t offset, struct fuse_file_info *fi){
-    int errMsg = 0;
-    errMsg = pread(fi->fh, buf, size, offset);
-    if (errMsg < 0)
-        return -errMsg;
-
-    return errMsg;
-}
 
 static struct fuse_operations rpfs_oper = {
         .getattr        = rpfs_getattr,
