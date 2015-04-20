@@ -197,8 +197,7 @@ static int rpfs_checkCrash(struct fuse_file_info *fi){
         return -errno;
     }
     const char *currNodes;
-    rpfs_readdir("/", currNodes,
-    fuse_filler_dir_t filler(void *buf, const char *name,const struct [Stat] *stbuf, off_t off) , 0, fi);
+    rpfs_readdir("/", currNodes,fuse_filler_dir_t filler, 0, fi);
     int index=0;
     while(nodeListing[index] != NULL){
         if(strcmp(backups[index],nodeListing[index])!=0){
