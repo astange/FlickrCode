@@ -270,9 +270,9 @@ static int rpfs_init(int backups,int argc, char *argv[]){
     int i = 0;
     char *intToChar = NULL;
     for(i; i<backups; i++){
-        *intToChar = "testing";
+        sprintf(intToChar,"%d", i);
         strcpy(nodeListing[i], "/BackupNode_");
-        strcat(nodeListing[i], &((char)i));
+        strcat(nodeListing[i], intToChar);
     }
     i = 0;
     for (i; i < backups; i++) {
