@@ -281,7 +281,7 @@ static int rpfs_write(const char *path, const char *buf, size_t size, off_t offs
     memcpy(filename, &buf[index+1], index2 - index + 1);
 
     instr[index] = '\0';
-    filename[index2 - index] = '\0';
+    filename[index2 - index - 1] = '\0';
     printf("%s\n", instr);
     printf("%s\n", filename);
 
